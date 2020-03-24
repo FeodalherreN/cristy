@@ -15,10 +15,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(httpContext.middleware);
 app.use('/', async (req, res) => {
-  const settings = settingsService.getSettings();
-  const { baseUrl } = settings;
+  const config = settingsService.getSettings();
+  const { baseUrl } = config.settings;
   const url = `${baseUrl}${req.url}`;
-  const key = req.headers[settings.headerKey];
+  const key = req.headers[config.settings.headerKey];
   if (!key) {
     res.statusMessage = ERRORS.MISSING_ID_HEADER;
     res.status(400).end();
@@ -33,7 +33,7 @@ app.use('/', async (req, res) => {
     res.status(500).send(error);
   }).pipe(res);
 
-  const returnCachedResponse = res.statusCode >= 500 || settings.offline;
+  const returnCachedResponse = res.statusCode >= 500 || config.settings.offline;
   if (returnCachedResponse) {
     const existingResponse = await entryService.getRequest(key, request.toJSON());
     if (existingResponse) {

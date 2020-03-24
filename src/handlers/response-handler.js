@@ -13,7 +13,6 @@ const responseHandler = {
         if (id) {
           const entry = response.toJSON();
           entry.id = id;
-          console.log(entry);
           entyService.insertEntry(entry);
         }
       }

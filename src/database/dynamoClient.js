@@ -1,8 +1,8 @@
 import AWS from 'aws-sdk';
 import crypto from 'crypto';
-import fs from 'fs';
+import settingsService from '../services/settings-service';
 
-const config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
+const config = settingsService.getSettings();
 AWS.config.update(config.aws);
 const docClient = new AWS.DynamoDB.DocumentClient();
 
@@ -46,9 +46,10 @@ const dynamoClient = {
   async insertItem(key, value) {
     const params = {
       TableName: 'entries',
-      Key: crypto.createHash('md5').update(key).digest('hex'),
-      Item: {
+      Key: {
         id: crypto.createHash('md5').update(key).digest('hex'),
+      },
+      Item: {
         entry: value,
       },
     };
