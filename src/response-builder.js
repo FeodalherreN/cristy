@@ -1,4 +1,4 @@
-import { RESPONSE_TYPE } from './constants';
+import { ERRORS, RESPONSE_TYPE } from './constants';
 import configService from './services/config-service';
 import entryService from './services/entry-service';
 
@@ -25,7 +25,12 @@ const getResponseType = (res, error) => {
   return RESPONSE_TYPE.OK;
 };
 
-const handleApiResponse = async (req, res, request, error) => {
+const handleInvalidRequest = (res) => {
+  res.statusMessage = ERRORS.MISSING_ID_HEADER;
+  res.status(400).end();
+};
+
+const handlePipedResponse = async (req, res, request, error) => {
   const responseType = getResponseType(res, error);
 
   switch (responseType) {
@@ -40,4 +45,7 @@ const handleApiResponse = async (req, res, request, error) => {
   }
 };
 
-export default handleApiResponse;
+export {
+  handleInvalidRequest,
+  handlePipedResponse,
+};
