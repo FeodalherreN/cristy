@@ -1,8 +1,8 @@
 import AWS from 'aws-sdk';
 import crypto from 'crypto';
-import settingsService from '../services/settings-service';
+import configService from '../services/config-service';
 
-const config = settingsService.getSettings();
+const config = configService.getSettings();
 AWS.config.update(config.aws);
 const docClient = new AWS.DynamoDB.DocumentClient();
 

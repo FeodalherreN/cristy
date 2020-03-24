@@ -3,7 +3,7 @@ import dynamoClient from '../database/dynamoClient';
 const entryService = {
   async insertEntry(entry) {
     const key = JSON.stringify({
-      id: entry.connectId,
+      id: entry.id,
       'request.method': entry.request.method,
       'request.uri.host': entry.request.uri.host,
       'request.uri.path': entry.request.uri.path,
@@ -23,7 +23,6 @@ const entryService = {
       'request.uri.host': request.uri.host,
       'request.uri.path': request.uri.path,
     });
-
     const result = await dynamoClient.getItem(key);
     return result;
   },

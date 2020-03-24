@@ -1,6 +1,4 @@
-# Project Name
-
-Cristy
+# Cristy
 
 ## Installation
 
@@ -9,11 +7,13 @@ npm install
 npm run start
 ```
 
-Install MongoDB and create database called 'cristy'.
+## Database
+
+Setup a dynamodb table in AWS called 'entities' and make sure to set environment variables for AWS. 
 
 ## Usage
 
-Set the required settings in settings collection in the database. The settings collection will be created upon first start.
+Set the required settings in config.json file in the root of the project.
 After that you can simply call https://localhost:3000/suburl/parameter which will be translated to https://settings.baseUrl/suburl/parameter.
 
 ## Contributing

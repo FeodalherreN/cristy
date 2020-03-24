@@ -1,7 +1,7 @@
 {
-  "name": "api",
+  "name": "cristy",
   "version": "1.0.0",
-  "description": "",
+  "description": "Proxy service that saves network traffic to a database to enable future offline use.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,8 +17,6 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-http-context": "^1.2.3",
-    "greenlock-express": "^4.0.3",
-    "mongodb": "^3.5.5",
     "nodemon": "^2.0.2",
     "request": "^2.88.2"
   },
