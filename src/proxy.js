@@ -15,17 +15,17 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(httpContext.middleware);
 app.use('/', async (req, res) => {
-  const settings = await settingsService.getSettings();
+  const settings = settingsService.getSettings();
   const { baseUrl } = settings;
-  const url = `${baseUrl}e${req.url}`;
+  const url = `${baseUrl}${req.url}`;
   const key = req.headers[settings.headerKey];
   if (!key) {
-    res.statusMessage = ERRORS.MISSING_CONNECT_HEADER;
+    res.statusMessage = ERRORS.MISSING_ID_HEADER;
     res.status(400).end();
     return;
   }
 
-  httpContext.set(HTTP_CONTEXT_KEYS.CONNECT_ID, key);
+  httpContext.set(HTTP_CONTEXT_KEYS.ID, key);
   const request = requestHandler.getRequest(req, url, sslOptions);
 
   console.info(`Proxying request with url: ${request.uri.href} and method: ${request.method}`);

@@ -1,0 +1,10 @@
+{
+    "aws": {
+        "region": "eu-north-1"
+    },
+    "settings": {
+        "baseUrl": "https://jsonplaceholder.typicode.com",
+        "headerKey": "connectid",
+        "offline": false
+    }
+}

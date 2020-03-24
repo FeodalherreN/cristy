@@ -15,6 +15,7 @@ const requestHandler = {
       cert: sslOptions.cert,
       key: sslOptions.key,
       headers,
+      json: true,
     };
 
     let r = null;

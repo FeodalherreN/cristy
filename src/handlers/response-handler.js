@@ -9,17 +9,18 @@ const responseHandler = {
 
       const isValidRequest = response.statusCode < 300;
       if (isValidRequest) {
-        const connectId = httpContext.get(HTTP_CONTEXT_KEYS.CONNECT_ID);
-        if (connectId) {
+        const id = httpContext.get(HTTP_CONTEXT_KEYS.ID);
+        if (id) {
           const entry = response.toJSON();
-          entry.connectId = connectId;
+          entry.id = id;
+          console.log(entry);
           entyService.insertEntry(entry);
         }
       }
     }
 
     if (error) {
-      console.error(`Error while recieving response: ${error.message}`);
+      console.error(error);
     }
   },
 };
