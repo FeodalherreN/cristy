@@ -5,6 +5,7 @@
     "settings": {
         "baseUrl": "https://jsonplaceholder.typicode.com",
         "headerKey": "connectid",
-        "offline": false
+        "offline": false,
+        "port": 3000
     }
 }

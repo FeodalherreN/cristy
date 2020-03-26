@@ -32,7 +32,7 @@ const dynamoClient = {
       },
       UpdateExpression: 'set entry = :v',
       ExpressionAttributeValues: {
-        ':v': value,
+        ':v': this.removeEmptyStringElements(value),
       },
       ReturnValues: 'UPDATED_NEW',
     };
@@ -50,7 +50,7 @@ const dynamoClient = {
         id: crypto.createHash('md5').update(key).digest('hex'),
       },
       Item: {
-        entry: value,
+        entry: this.removeEmptyStringElements(value),
       },
     };
 
@@ -59,6 +59,19 @@ const dynamoClient = {
     } catch (error) {
       console.error(error);
     }
+  },
+  removeEmptyStringElements(obj) {
+    if (obj == null) return obj;
+
+    const tempObj = obj;
+    Object.keys(tempObj).forEach((prop) => {
+      if (typeof tempObj[prop] === 'object') {
+        this.removeEmptyStringElements(tempObj[prop]);
+      } else if (tempObj[prop] === '') {
+        delete tempObj[prop];
+      }
+    });
+    return tempObj;
   },
 };
 

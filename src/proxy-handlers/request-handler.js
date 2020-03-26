@@ -3,7 +3,7 @@ import { HEADERS_TO_EXCLUDE } from '../constants';
 import responseHandler from './response-handler';
 
 const requestHandler = {
-  getRequest(req, url, sslOptions) {
+  getRequest(req, url) {
     const headers = [];
     Object.entries(req.headers).forEach(([key, val]) => {
       if (!HEADERS_TO_EXCLUDE.includes(key)) {
@@ -12,8 +12,6 @@ const requestHandler = {
     });
 
     const agentOptions = {
-      cert: sslOptions.cert,
-      key: sslOptions.key,
       headers,
       gzip: true,
       json: true,

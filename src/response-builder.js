@@ -4,13 +4,24 @@ import entryService from './services/entry-service';
 
 const config = configService.getSettings();
 
+const isJson = (str) => {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+  return true;
+};
+
 const handleOfflineResponse = async (req, res, request) => {
   const key = req.headers[config.settings.headerKey];
   const existingResponse = await entryService.getRequest(key, request.toJSON());
   if (existingResponse && existingResponse.Item) {
     res.statusCode = existingResponse.Item.statusCode;
     res.headers = existingResponse.Item.headers;
-    res.json(JSON.parse(existingResponse.Item.body));
+    if (isJson(existingResponse.Item.body)) {
+      res.json(JSON.parse(existingResponse.Item.body));
+    }
     res.status(200).end();
   }
 };

@@ -1,9 +1,6 @@
-import https from 'https';
 import proxy from './proxy';
-import sslLoader from './security/ssl-loader';
+import configService from './services/config-service';
 
-const port = 3000;
-const sslOptions = sslLoader.loadOptions();
-const proxyInstance = proxy;
+const config = configService.getSettings();
 
-https.createServer(sslOptions, proxyInstance).listen(port, () => console.log(`Proxy started and listening on port ${port}!`));
+proxy.listen(config.settings.port, () => console.log(`Proxy started and listening on port ${config.settings.port}`));
