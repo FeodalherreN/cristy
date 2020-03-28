@@ -3,7 +3,7 @@ import express from 'express';
 import httpContext from 'express-http-context';
 import configService from './services/config-service';
 import { HTTP_CONTEXT_KEYS } from './constants';
-import { handleInvalidRequest, handlePipedResponse } from './response-builder';
+import { handlePipedResponse } from './response-builder';
 import requestHandler from './proxy-handlers/request-handler';
 
 const app = express();
@@ -17,9 +17,10 @@ app.use('/', async (req, res) => {
   const { baseUrl } = config.settings;
   const url = `${baseUrl}${req.url}`;
   const key = req.headers[config.settings.headerKey];
-  if (!key) handleInvalidRequest(res);
+  if (key) {
+    httpContext.set(HTTP_CONTEXT_KEYS.ID, key);
+  }
 
-  httpContext.set(HTTP_CONTEXT_KEYS.ID, key);
   const request = requestHandler.getRequest(req, url);
 
   console.info(`Proxying request with url: ${request.uri.href} and method: ${request.method}`);
