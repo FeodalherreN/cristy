@@ -2,10 +2,16 @@
     "aws": {
         "region": "eu-north-1"
     },
+    "mongo": {
+        "connection_url": "mongodb://192.168.1.22:27017",
+        "database": "cristy",
+        "entry_collection": "entries"
+    },
     "settings": {
         "baseUrl": "https://jsonplaceholder.typicode.com",
         "headerKey": "connectid",
         "offline": false,
-        "port": 3000
+        "port": 3000,
+        "database": "mongodb"
     }
 }

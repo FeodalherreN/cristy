@@ -1,9 +1,12 @@
+
 import request from 'request';
-import { HEADERS_TO_EXCLUDE } from '../constants';
+import httpContext from 'express-http-context';
+import { HTTP_CONTEXT_KEYS, HEADERS_TO_EXCLUDE } from '../constants';
 import responseHandler from './response-handler';
 
 const requestHandler = {
-  getRequest(req, url) {
+  getRequest(req) {
+    const url = httpContext.get(HTTP_CONTEXT_KEYS.URL);
     const headers = [];
     Object.entries(req.headers).forEach(([key, val]) => {
       if (!HEADERS_TO_EXCLUDE.includes(key)) {

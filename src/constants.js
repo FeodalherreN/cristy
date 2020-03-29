@@ -6,12 +6,17 @@ const HEADERS_TO_EXCLUDE = [
   'host',
 ];
 const HTTP_CONTEXT_KEYS = {
+  CONFIG: 'config',
   ID: 'id',
+  URL: 'url',
 };
 const RESPONSE_TYPE = {
-  OK: 0,
-  SERVER_ERROR: 1,
-  OFFLINE: 2,
+  OK: 'OK',
+  SERVER_ERROR: 'SERVER_ERROR',
+  OFFLINE: 'OFFLINE',
+};
+const ROUTES = {
+  HIDDEN_ROUTE: '/super-secret-route',
 };
 
 export {
@@ -19,4 +24,5 @@ export {
   HEADERS_TO_EXCLUDE,
   HTTP_CONTEXT_KEYS,
   RESPONSE_TYPE,
+  ROUTES,
 };

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec babel-node src/index.js",
-    "lint": "eslint src/**/*.js --fix && eslint src/*.js --fix"
+    "lint": "eslint src/**/**/*.js --fix && eslint src/**/*.js --fix && eslint src/*.js --fix"
   },
   "author": "",
   "license": "ISC",
@@ -14,11 +14,14 @@
     "aws-sdk": "^2.645.0",
     "babel-preset-env": "^1.7.0",
     "body-parser": "^1.19.0",
+    "chalk": "^3.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-http-context": "^1.2.3",
+    "mongodb": "^3.5.5",
     "nodemon": "^2.0.2",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "short-hash": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

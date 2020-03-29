@@ -1,30 +1,54 @@
-import dynamoClient from '../database/dynamoClient';
+import httpContext from 'express-http-context';
+import { HTTP_CONTEXT_KEYS } from '../constants';
+import client from '../database/client';
+import queryBuilder from '../builders/query-builder';
 
 const entryService = {
-  async insertEntry(entry) {
-    const key = JSON.stringify({
-      id: entry.id,
-      'request.method': entry.request.method,
-      'request.uri.host': entry.request.uri.host,
-      'request.uri.path': entry.request.uri.path,
-    });
-    const existingEntry = await dynamoClient.getItem(key);
+  async insertOrUpdateEntry(response) {
+    const hash = queryBuilder.createFromResponse(response);
+    if (!hash) return;
+
+    const query = {
+      _id: hash,
+    };
+    const existingEntry = await client.findOne(query);
 
     if (existingEntry) {
-      await dynamoClient.updateItem(key, entry);
+      await client.updateOne(query, response);
     } else {
-      await dynamoClient.insertItem(key, entry);
+      response.id = httpContext.get(HTTP_CONTEXT_KEYS.ID);
+      await client.insertOne(query, response);
     }
   },
-  async getRequest(id, request) {
-    const key = JSON.stringify({
-      id,
-      'request.method': request.method,
-      'request.uri.host': request.uri.host,
-      'request.uri.path': request.uri.path,
-    });
-    const result = await dynamoClient.getItem(key);
+  async updateEntry(response) {
+    const hash = queryBuilder.createFromResponse(response);
+    if (!hash) return false;
+
+    const query = {
+      _id: hash,
+    };
+    const existingEntry = await client.findOne(query);
+    if (existingEntry) {
+      await client.updateOne(query, response);
+      return true;
+    }
+
+    return false;
+  },
+  async getEntry(request) {
+    const query = queryBuilder.createFromRequest(request);
+    const result = await client.findOne(query);
     return result;
+  },
+  async getEntryOffline(request) {
+    const query = queryBuilder.createFromRequest(request);
+    const result = await client.findOne(query);
+    return result;
+  },
+  async queryEntries(body) {
+    const params = queryBuilder.createDatabaseQuery(body);
+    const response = await client.findMany(params);
+    return response;
   },
 };
 
