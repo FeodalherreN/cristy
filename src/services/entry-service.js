@@ -27,6 +27,7 @@ const entryService = {
     const query = {
       _id: hash,
     };
+
     const existingEntry = await client.findOne(query);
     if (existingEntry) {
       await client.updateOne(query, response);

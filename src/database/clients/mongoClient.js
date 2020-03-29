@@ -61,6 +61,7 @@ const mongoClient = {
           body: entry.body,
           headers: entry.headers,
           request: entry.request,
+          statusCode: entry.statusCode,
         },
       };
 
