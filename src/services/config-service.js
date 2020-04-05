@@ -11,12 +11,12 @@ const configService = {
   setConfig(config) {
     const json = JSON.stringify(config, null, 2);
     return fs.writeFile(configPath, json, (error) => {
-      if(error) {
-          logger.error(error);
-          return false;
+      if (error) {
+        logger.error(error);
+        return false;
       }
       return true;
-  }); 
+    });
   },
 };
 

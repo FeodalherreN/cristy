@@ -68,9 +68,22 @@ const responseBuilder = {
         break;
     }
   },
-  handleQueryRequest: async (req, res) => {
-    const entries = await entryService.queryEntries(req.body);
-    res.json(entries);
+  handleGetEntryRequest: async (req, res) => {
+    const query = {
+      id: req.params.id,
+      method: req.params.method,
+      host: req.params.host,
+      path: req.params.path,
+    };
+
+    const result = entryService.getEntryByObject(query);
+    res.json(result);
+    res.status(200).end();
+  },
+  handleGetManyEntriesRequest: async (req, res) => {
+    const { id } = req.params;
+    const result = await entryService.getEntries(id);
+    res.json(result);
     res.status(200).end();
   },
   handleUpdateRequest: async (req, res) => {
@@ -85,7 +98,7 @@ const responseBuilder = {
   handleConfigUpdateRequest: (req, res) => {
     const result = configService.setConfig(req.body);
     res.status(200).end();
-  }
+  },
 };
 
 export default responseBuilder;

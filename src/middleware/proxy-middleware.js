@@ -15,11 +15,12 @@ const middleware = (app) => {
     const { baseUrl } = config.settings;
     const url = `${baseUrl}${req.url}`;
     const key = req.headers[config.settings.headerKey];
+    const host = req.headers['host'];
 
     if (key) httpContext.set(HTTP_CONTEXT_KEYS.ID, key);
-
-    httpContext.set(HTTP_CONTEXT_KEYS.CONFIG, config);
-    httpContext.set(HTTP_CONTEXT_KEYS.URL, url);
+    if (host) httpContext.set(HTTP_CONTEXT_KEYS.HOST, host);
+    if (config) httpContext.set(HTTP_CONTEXT_KEYS.CONFIG, config);
+    if (url) httpContext.set(HTTP_CONTEXT_KEYS.URL, url);
     next();
   });
 };

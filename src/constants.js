@@ -7,6 +7,7 @@ const HEADERS_TO_EXCLUDE = [
 ];
 const HTTP_CONTEXT_KEYS = {
   CONFIG: 'config',
+  HOST: 'host',
   ID: 'id',
   URL: 'url',
 };
@@ -15,15 +16,10 @@ const RESPONSE_TYPE = {
   SERVER_ERROR: 'SERVER_ERROR',
   OFFLINE: 'OFFLINE',
 };
-const ROUTES = {
-  HIDDEN_ENTRY_ROUTE: '/secret-entry-route',
-  HIDDEN_CONFIG_ROUTE: '/secret-config-route'
-};
 
 export {
   ERRORS,
   HEADERS_TO_EXCLUDE,
   HTTP_CONTEXT_KEYS,
   RESPONSE_TYPE,
-  ROUTES,
 };

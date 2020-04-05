@@ -5,12 +5,8 @@ import queryBuilder from '../builders/query-builder';
 
 const entryService = {
   async insertOrUpdateEntry(response) {
-    const hash = queryBuilder.createFromResponse(response);
-    if (!hash) return;
+    const query = queryBuilder.createFromResponse(response);
 
-    const query = {
-      _id: hash,
-    };
     const existingEntry = await client.findOne(query);
 
     if (existingEntry) {
@@ -21,12 +17,7 @@ const entryService = {
     }
   },
   async updateEntry(response) {
-    const hash = queryBuilder.createFromResponse(response);
-    if (!hash) return false;
-
-    const query = {
-      _id: hash,
-    };
+    const query = queryBuilder.createFromResponse(response);
 
     const existingEntry = await client.findOne(query);
     if (existingEntry) {
@@ -46,9 +37,13 @@ const entryService = {
     const result = await client.findOne(query);
     return result;
   },
-  async queryEntries(body) {
-    const params = queryBuilder.createDatabaseQuery(body);
-    const response = await client.findMany(params);
+  async getEntryByObject(query) {
+    const mongoQuery = queryBuilder.createFromObject(query);
+    const result = await client.findOne(mongoQuery);
+    return result;
+  },
+  async getEntries(id) {
+    const response = await client.findMany(id);
     return response;
   },
 };
