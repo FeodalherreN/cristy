@@ -1,5 +1,6 @@
 import httpContext from 'express-http-context';
 import { ERRORS, HTTP_CONTEXT_KEYS, RESPONSE_TYPE } from '../constants';
+import configService from '../services/config-service';
 import entryService from '../services/entry-service';
 
 const isJsonString = (str) => {
@@ -76,6 +77,15 @@ const responseBuilder = {
     const result = await entryService.updateEntry(req.body);
     res.status(result ? 200 : 400).end();
   },
+  handleConfigRequest: (req, res) => {
+    const config = httpContext.get(HTTP_CONTEXT_KEYS.CONFIG);
+    res.json(config);
+    res.status(200).end();
+  },
+  handleConfigUpdateRequest: (req, res) => {
+    const result = configService.setConfig(req.body);
+    res.status(200).end();
+  }
 };
 
 export default responseBuilder;

@@ -1,8 +1,8 @@
 import cors from 'cors';
 import express from 'express';
 import httpContext from 'express-http-context';
-import configService from './services/config-service';
-import { HTTP_CONTEXT_KEYS } from './constants';
+import configService from '../services/config-service';
+import { HTTP_CONTEXT_KEYS } from '../constants';
 
 const config = configService.loadConfig();
 

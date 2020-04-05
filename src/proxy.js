@@ -1,10 +1,10 @@
 import express from 'express';
-import middlware from './middleware';
-import routes from './routes';
+import middleware from './middleware/proxy-middleware';
+import { proxyRoutes } from './routes';
 
 const app = express();
 
-middlware(app);
-routes(app);
+middleware(app);
+proxyRoutes(app);
 
 export default app;

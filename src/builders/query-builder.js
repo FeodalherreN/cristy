@@ -1,32 +1,37 @@
 import httpContext from 'express-http-context';
+import shortHash from 'short-hash';
 import { HTTP_CONTEXT_KEYS } from '../constants';
-import dynamoQueryBuilder from './query-builders/dynamo-query-builder';
-import mongoQueryBuilder from './query-builders/mongo-query-builder';
 
-const getQueryBuilder = () => {
-  const config = httpContext.get(HTTP_CONTEXT_KEYS.CONFIG);
-  if (config.settings.database === 'mongodb') {
-    return mongoQueryBuilder;
-  }
-  if (config.settings.database === 'dynamodb') {
-    return dynamoQueryBuilder;
-  }
-
-  throw new Error('NO_DATABASE_SET_IN_CONFIG');
-};
+const prefixSalt = 'eb';
+const suffixSalt = 'be';
 
 const queryBuilder = {
   createFromRequest(request) {
-    const queryBuilderInstance = getQueryBuilder();
-    return queryBuilderInstance.createFromRequest(request);
+    const id = httpContext.get(HTTP_CONTEXT_KEYS.ID);
+    const key = JSON.stringify({
+      id,
+      'request.method': request.method,
+      'request.uri.host': request.uri.host,
+      'request.uri.path': request.uri.path,
+    });
+    const hash = `${prefixSalt}${shortHash(key)}${suffixSalt}`;
+
+    return hash;
   },
   createFromResponse(response) {
-    const queryBuilderInstance = getQueryBuilder();
-    return queryBuilderInstance.createFromResponse(response);
+    const id = httpContext.get(HTTP_CONTEXT_KEYS.ID);
+    const key = JSON.stringify({
+      id,
+      'request.method': response.request.method,
+      'request.uri.host': response.request.uri.host,
+      'request.uri.path': response.request.uri.path,
+    });
+    const hash = `${prefixSalt}${shortHash(key)}${suffixSalt}`;
+
+    return hash;
   },
   createDatabaseQuery(obj) {
-    const queryBuilderInstance = getQueryBuilder();
-    return queryBuilderInstance.createDatabaseQuery(obj);
+    return obj;
   },
 };
 

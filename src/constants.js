@@ -16,7 +16,8 @@ const RESPONSE_TYPE = {
   OFFLINE: 'OFFLINE',
 };
 const ROUTES = {
-  HIDDEN_ROUTE: '/super-secret-route',
+  HIDDEN_ENTRY_ROUTE: '/secret-entry-route',
+  HIDDEN_CONFIG_ROUTE: '/secret-config-route'
 };
 
 export {
