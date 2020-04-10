@@ -1,6 +1,5 @@
 import httpContext from 'express-http-context';
-import { ERRORS, HTTP_CONTEXT_KEYS, RESPONSE_TYPE } from '../constants';
-import configService from '../services/config-service';
+import { HTTP_CONTEXT_KEYS, RESPONSE_TYPE } from '../constants';
 import entryService from '../services/entry-service';
 
 const isJsonString = (str) => {
@@ -21,10 +20,6 @@ const getResponseType = (res, error) => {
 };
 
 const responseBuilder = {
-  handleInvalidRequest: (res) => {
-    res.statusMessage = ERRORS.MISSING_ID_HEADER;
-    res.status(400).end();
-  },
   handleOfflineResponse: async (req, res) => {
     const config = httpContext.get(HTTP_CONTEXT_KEYS.CONFIG);
     const request = {
@@ -67,37 +62,6 @@ const responseBuilder = {
       default:
         break;
     }
-  },
-  handleGetEntryRequest: async (req, res) => {
-    const query = {
-      id: req.params.id,
-      method: req.params.method,
-      host: req.params.host,
-      path: req.params.path,
-    };
-
-    const result = entryService.getEntryByObject(query);
-    res.json(result);
-    res.status(200).end();
-  },
-  handleGetManyEntriesRequest: async (req, res) => {
-    const { id } = req.params;
-    const result = await entryService.getEntries(id);
-    res.json(result);
-    res.status(200).end();
-  },
-  handleUpdateRequest: async (req, res) => {
-    const result = await entryService.updateEntry(req.body);
-    res.status(result ? 200 : 400).end();
-  },
-  handleConfigRequest: (req, res) => {
-    const config = httpContext.get(HTTP_CONTEXT_KEYS.CONFIG);
-    res.json(config);
-    res.status(200).end();
-  },
-  handleConfigUpdateRequest: (req, res) => {
-    const result = configService.setConfig(req.body);
-    res.status(200).end();
   },
 };
 
