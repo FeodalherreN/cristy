@@ -1,6 +1,6 @@
-import httpContext from 'express-http-context';
-import { HTTP_CONTEXT_KEYS, RESPONSE_TYPE } from '../constants';
-import entryService from '../services/entry-service';
+import httpContext from "express-http-context";
+import { HTTP_CONTEXT_KEYS, RESPONSE_TYPE } from "../constants";
+import entryService from "../services/entry-service";
 
 const isJsonString = (str) => {
   try {
@@ -33,7 +33,7 @@ const responseBuilder = {
     if (existingResponse) {
       res.statusCode = existingResponse.statusCode;
       res.headers = existingResponse.headers;
-      if (typeof existingResponse.body === 'object') {
+      if (typeof existingResponse.body === "object") {
         res.json(existingResponse.body);
       } else if (isJsonString(existingResponse.body)) {
         res.json(JSON.parse(existingResponse.body));
@@ -43,7 +43,7 @@ const responseBuilder = {
       const statusCode = 418;
       res.json({
         code: statusCode,
-        message: 'Error connecting to server, no entry found from database.',
+        message: "Error connecting to server, no entry found from database.",
         query: request,
       });
       res.status(statusCode).end();

@@ -1,8 +1,8 @@
-import fs from 'fs';
-import logger from '../logger';
+import fs from "fs";
+import logger from "../logger";
 
-const configPath = './config.json';
-const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+const configPath = "./config.json";
+const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
 
 const configService = {
   loadConfig() {

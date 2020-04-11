@@ -1,14 +1,13 @@
-import { MongoClient } from 'mongodb';
-import httpContext from 'express-http-context';
-import { HTTP_CONTEXT_KEYS } from '../constants';
-import { encrypt, decrypt } from '../crypt';
-import logger from '../logger';
+import { MongoClient } from "mongodb";
+import httpContext from "express-http-context";
+import { HTTP_CONTEXT_KEYS } from "../constants";
+import logger from "../logger";
 
 const getConnection = async () => {
   const options = { useUnifiedTopology: true };
   const clientInstance = await new MongoClient(
     process.env.MONGO_CONNECTION_URL,
-    options,
+    options
   ).connect();
   const dbInstance = clientInstance.db(process.env.MONGO_DATABASE);
   const connection = {
@@ -23,13 +22,12 @@ const mongoClient = {
   async findOne(query) {
     const connection = await getConnection();
     try {
-      const collection = connection.db.collection('entries');
+      const collection = connection.db.collection("entries");
 
-      const encryptedEntry = await collection.findOne(query);
+      const existingEntry = await collection.findOne(query);
+      if (existingEntry == null) return existingEntry;
 
-      if (encryptedEntry == null) return encryptedEntry;
-
-      return decrypt(encryptedEntry.entry);
+      return existingEntry;
     } catch (error) {
       logger.error(error);
 
@@ -38,21 +36,21 @@ const mongoClient = {
       await connection.client.close();
     }
   },
-  async findMany(id) {
+  async findMany(query) {
     const connection = await getConnection();
     try {
-      const collection = connection.db.collection('entries');
+      const collection = connection.db.collection("entries");
 
-      const encryptedEntries = await collection.find({ id }).sort({ timestamp: -1 }).limit(500).toArray();
-      if (!encryptedEntries || encryptedEntries.length === 0) {
-        return encryptedEntries;
+      const entries = await collection
+        .find(query)
+        .sort({ timestamp: -1 })
+        .limit(500)
+        .toArray();
+      if (!entries || entries.length === 0) {
+        return entries;
       }
-      const decryptedEntries = encryptedEntries.map((row) => ({
-        _id: row._id,
-        id: row.id,
-        entry: decrypt(row.entry),
-      }));
-      return decryptedEntries;
+
+      return entries;
     } catch (error) {
       logger.error(error);
 
@@ -64,14 +62,14 @@ const mongoClient = {
   async updateOne(query, entry) {
     const connection = await getConnection();
     try {
-      const collection = connection.db.collection('entries');
+      const collection = connection.db.collection("entries");
 
+      entry.id = httpContext.get(HTTP_CONTEXT_KEYS.ID);
+      entry.client = httpContext.get(HTTP_CONTEXT_KEYS.HOST);
+      entry.timestamp = Date.now();
       const replacementEntry = {
         _id: query._id,
-        id: httpContext.get(HTTP_CONTEXT_KEYS.ID),
-        client: httpContext.get(HTTP_CONTEXT_KEYS.HOST),
-        timestamp: Date.now(),
-        entry: encrypt(entry),
+        entry: entry,
       };
 
       await collection.replaceOne(query, replacementEntry);
@@ -84,16 +82,15 @@ const mongoClient = {
   async insertOne(query, entry) {
     const connection = await getConnection();
     try {
-      const collection = connection.db.collection('entries');
+      const collection = connection.db.collection("entries");
 
+      entry.id = httpContext.get(HTTP_CONTEXT_KEYS.ID);
+      entry.client = httpContext.get(HTTP_CONTEXT_KEYS.HOST);
+      entry.timestamp = Date.now();
       const newEntry = {
         _id: query._id,
-        id: httpContext.get(HTTP_CONTEXT_KEYS.ID),
-        client: httpContext.get(HTTP_CONTEXT_KEYS.HOST),
-        timestamp: Date.now(),
-        entry: encrypt(entry),
+        entry: entry,
       };
-
       await collection.insertOne(newEntry);
     } catch (error) {
       logger.error(error);

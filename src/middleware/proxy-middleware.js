@@ -1,8 +1,8 @@
-import cors from 'cors';
-import express from 'express';
-import httpContext from 'express-http-context';
-import configService from '../services/config-service';
-import { HTTP_CONTEXT_KEYS } from '../constants';
+import cors from "cors";
+import express from "express";
+import httpContext from "express-http-context";
+import configService from "../services/config-service";
+import { HTTP_CONTEXT_KEYS } from "../constants";
 
 const config = configService.loadConfig();
 
@@ -15,12 +15,13 @@ const middleware = (app) => {
     const { baseUrl } = config.settings;
     const url = `${baseUrl}${req.url}`;
     const key = req.headers[config.settings.headerKey];
-    const host = req.headers['host'];
+    const host = req.headers["host"];
+    const NOT_SET = "NOT_SET";
 
-    if (key) httpContext.set(HTTP_CONTEXT_KEYS.ID, key);
-    if (host) httpContext.set(HTTP_CONTEXT_KEYS.HOST, host);
-    if (config) httpContext.set(HTTP_CONTEXT_KEYS.CONFIG, config);
-    if (url) httpContext.set(HTTP_CONTEXT_KEYS.URL, url);
+    httpContext.set(HTTP_CONTEXT_KEYS.ID, key ?? NOT_SET);
+    httpContext.set(HTTP_CONTEXT_KEYS.HOST, host ?? NOT_SET);
+    httpContext.set(HTTP_CONTEXT_KEYS.CONFIG, config ?? NOT_SET);
+    httpContext.set(HTTP_CONTEXT_KEYS.URL, url ?? NOT_SET);
     next();
   });
 };

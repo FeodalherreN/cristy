@@ -1,7 +1,7 @@
-import httpContext from 'express-http-context';
-import { HTTP_CONTEXT_KEYS } from '../constants';
-import client from '../database/client';
-import queryBuilder from '../builders/query-builder';
+import httpContext from "express-http-context";
+import { HTTP_CONTEXT_KEYS } from "../constants";
+import client from "../database/client";
+import queryBuilder from "../builders/query-builder";
 
 const entryService = {
   async insertOrUpdateEntry(response) {
@@ -37,13 +37,13 @@ const entryService = {
     const result = await client.findOne(query);
     return result;
   },
-  async getEntryByObject(query) {
-    const mongoQuery = queryBuilder.createFromObject(query);
+  async getEntryById(id) {
+    const mongoQuery = queryBuilder.createFromId(id);
     const result = await client.findOne(mongoQuery);
     return result;
   },
-  async getEntries(id) {
-    const response = await client.findMany(id);
+  async getEntries(query) {
+    const response = await client.findMany(query);
     return response;
   },
 };

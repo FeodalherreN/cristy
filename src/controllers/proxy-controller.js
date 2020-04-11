@@ -1,7 +1,7 @@
-import httpContext from 'express-http-context';
-import { HTTP_CONTEXT_KEYS } from '../constants';
-import responseBuilder from '../builders/response-builder';
-import requestHandler from '../proxy-handlers/request-handler';
+import httpContext from "express-http-context";
+import { HTTP_CONTEXT_KEYS } from "../constants";
+import responseBuilder from "../builders/response-builder";
+import requestHandler from "../proxy-handlers/request-handler";
 
 const proxyController = {
   handle: async (req, res) => {
@@ -12,9 +12,12 @@ const proxyController = {
     }
 
     const request = requestHandler.getRequest(req);
-    req.pipe(request).on('error', async (error) => {
-      await responseBuilder.handlePipedResponse(req, res, error);
-    }).pipe(res);
+    req
+      .pipe(request)
+      .on("error", async (error) => {
+        await responseBuilder.handlePipedResponse(req, res, error);
+      })
+      .pipe(res);
 
     await responseBuilder.handlePipedResponse(req, res);
   },

@@ -1,5 +1,5 @@
-import httpContext from 'express-http-context';
-import configService from '../services/config-service';
+import httpContext from "express-http-context";
+import configService from "../services/config-service";
 
 const configController = {
   get: async (req, res) => {
